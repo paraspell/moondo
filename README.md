@@ -1,4 +1,4 @@
-# moondo
+# Moonfull_moonDo - UI enhacement for Moonbeam XCM Transactor
 
 ## Project setup
 ```
