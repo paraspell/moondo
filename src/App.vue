@@ -1,28 +1,123 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <b-navbar style="margin-bottom: 5%;">
+      <template #start>
+        <h1 style="margin-top: 0.5% ;" class="name first" >Moon</h1>
+        <img class="mainLogo rotate" src="./assets/moondo.png" />
+        <h1 style="margin-top: 0.5% ;margin-right: 2%;" class="name first" >Do</h1>
+        <b-navbar-item class="top" tag="router-link" to="/home" type="is-link">Home</b-navbar-item>
+        <b-navbar-item class="top" tag="router-link" to="/home" type="is-link">Generate sovereign</b-navbar-item>
+        <b-navbar-item class="top" tag="router-link" to="/home" type="is-link">Transactor XCM</b-navbar-item>
+
+          
+      </template>
+    </b-navbar>
+    <router-view/>
+    <notifications/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+  import { web3Accounts, web3Enable } from "@polkadot/extension-dapp"
+  import { defineComponent } from '@vue/composition-api'
+  import '@polkadot/api-augment';
+  import store from './store';
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  export default defineComponent({
+    data() {
+      return {
+        login: "",   //Currently logged account
+        accounts: [],   //List of collected injected wallets
+        isCardModalActive: false   //Used to determine whether wallet login popup is or is not active
+      };
+    },
+    mounted: async function () {
+
+      //Connect injected wallets that are available
+      const extensions = await web3Enable("PolkadotJS")
+      if(extensions.length == 0) {
+        this.$notify({ title: 'Error', text: 'You do not have PolkadotJS extension make sure to install one if you want to use your wallet.', type: 'error', duration: 8000,speed: 100})
+        return
+      }
+
+      //Collect injected wallets
+      this.accounts = await web3Accounts()
+    },
+    methods:{
+
+      //Used to extract address from injected wallet login
+      async accountLogin(value){
+        var accSplit = value.target.value.split('{ "address": "')
+        accSplit = accSplit[1].split('{ "address": "')
+        accSplit = accSplit[0].split('"')
+        this.loginn(accSplit[0])
+      },
+
+      //Used to save logged account for XCM screens
+      async loginn(value){
+        this.login=value
+        store.commit('saveAccount', this.login)
+      },  
+    }
+  })
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+  @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Anybody:wght@300&family=BIZ+UDGothic&family=Pacifico&display=swap");
+
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    background-color: white;
+    margin-top: 20px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+  .mainLogo {
+    width: 3%;
+  }
+  .rotate {
+    animation: rotation 50s infinite linear;
+  }
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+  .name {
+    color: #e1147a;
+    font-family: "Pacifico", cursive;
+    font-size: 40px;
+  }
+  .undername {
+    color: black;
+    font-family: "Anybody", cursive;
+    font-size: 14px;
+
+  }
+  .undertext {
+    color: black;
+    font-family: "Anybody", cursive;
+    font-size: 20px;
+    margin-bottom: 1px;
+    margin-top: 25px;
+  }
+  .together {
+    display:block
+  }
+  .flex__container {
+    display: flex;
+    flex-direction: column;
+  }
+  .top {
+    margin-top: 8px;
+  }
 </style>
+
