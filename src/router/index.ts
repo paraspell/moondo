@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
-    path: '/generatesov',
+    path: '/sovereign',
     name: 'generatesov',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -22,7 +22,7 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/TransactorXCM.vue')
   },
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: HomeView
   },
