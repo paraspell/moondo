@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-  
+
       <div class="box" style="margin-top: 25%;  font-family: 'Anybody', cursive;">
         You are logged in as {{$store.state.account}}.
       </div>
@@ -18,7 +18,15 @@
           <option v-for="(operation) in operations" :key="operation">{{operation}}</option>
         </b-select>
       </b-field>
-  
+
+      <b-field v-if="operation == 'Balance transfer'" class="textt" label-position="inside" label="Provide destination address">
+        <b-input expanded @input.native="addrSub($event)" v-model="addr"></b-input>
+      </b-field>
+
+      <b-field v-if="operation == 'Balance transfer'" class="textt" label-position="inside" label="Provide sum you wish to transfer">
+        <b-input expanded @input.native="sumSub($event)" v-model="sum"></b-input>
+      </b-field>
+
       <b-button class="buttonn" pack="fas" icon-right="file-import" expanded type="is-primary" @click="sendXCM($store.state.account)">Create call</b-button>
     
     </div>
@@ -36,6 +44,8 @@
     
       data() {
         return {
+            addr: "" as string,
+            sum: 0 as number,
             assetId: 0 as number,
             accIndex: 0 as number,
             operation: "" as string,   
@@ -54,6 +64,12 @@
           this.accIndex=value.target.value
         },
 
+        async sumSub(value: any){
+          this.sum=value.target.value
+        },
+        async addrSub(value: any){
+          this.addr=value.target.value
+        },
         async asstID(value: any){
           this.assetId=value.target.value
         },
