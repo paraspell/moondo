@@ -8,7 +8,7 @@
         <b-navbar-item style = "margin-left: 2%;" class="top" tag="router-link" to="/" type="is-link">Home</b-navbar-item>
         <b-navbar-item class="top" tag="router-link" to="/sovereign" type="is-link">Generate sovereign</b-navbar-item>
         <b-navbar-item class="top" tag="router-link" to="/transactor" type="is-link">Transactor XCM</b-navbar-item>
-        <b-navbar-item style = "margin-top: 0.2%; margin-left: 5%;" @click="isCardModalActive = true">Login with wallet<b-icon style="margin-left:5px;" size="is-small" pack="fas" icon="wallet"></b-icon></b-navbar-item>
+        <b-navbar-item style = "margin-top: 0.2%; margin-left: 5%;" @click="connect">Connect Metamask<b-icon style="margin-left:5px;" size="is-small" pack="fas" icon="wallet"></b-icon></b-navbar-item>
       </template>
     </b-navbar>
     <b-modal v-model="isCardModalActive" :width="640" scroll="keep">
@@ -22,6 +22,7 @@
       </b-select>
     </b-modal>
     <router-view/>
+    <vue-metamask ref="metamask" :initConnect="false"></vue-metamask>
     <notifications/>
   </div>
 </template>
@@ -31,8 +32,12 @@
   import { defineComponent } from '@vue/composition-api'
   import '@polkadot/api-augment';
   import store from './store';
+  import VueMetamask from 'vue-metamask';
 
   export default defineComponent({
+    components: {
+            VueMetamask,
+        },
     data() {
       return {
         login: "",   //Currently logged account
@@ -62,6 +67,9 @@
         this.loginn(accSplit[0])
       },
 
+      connect() {
+                this.$refs.metamask.init();
+      },
       //Used to save logged account for XCM screens
       async loginn(value){
         this.login=value

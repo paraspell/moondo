@@ -39,9 +39,9 @@
     import { decodeAddress } from '@polkadot/util-crypto'
     import { web3FromAddress } from "@polkadot/extension-dapp"
     import '@polkadot/api-augment';
-  
+
     export default defineComponent({
-    
+
       data() {
         return {
             addr: "" as string,
@@ -77,8 +77,53 @@
           this.operation=value.target.value
         },
 
+        //ACCOUNT REGISTERED ON MOONBASE ALPHA TESTNET THAT HAS SUDO DETAILS:
+        // PRIVATE KEY 0x28194e8ddb4a2f2b110ee69eaba1ee1f35e88da2222b5a7d6e3afa14cf7a3347
+        //INDEX 42
+        //ADDRESS 0x44236223aB4291b93EEd10E4B511B37a398DEE55
+
+        //XCUNIT ASSET ID 42259045809535163221576417993425387648
+
+        //MOONBASE ALPHA WSS - wss://wss.api.moonbase.moonbeam.network
+        //MOONBASE RELAY WSS - wss://frag-moonbase-relay-rpc-ws.g.moonbase.moonbeam.network
+
         async sendXCM(address: string){
-            console.log("Hi")
+          const wsProvider = new WsProvider('wss://wss.api.moonbase.moonbeam.network');
+          const api = await ApiPromise.create({ provider: wsProvider });
+
+          const wsProvider2 = new WsProvider('wss://frag-moonbase-relay-rpc-ws.g.moonbase.moonbeam.network');
+          const api2 = await ApiPromise.create({ provider: wsProvider });
+          
+          if(this.operation == "Balance transfer"){
+
+            //Calculate encoded data for balance transfer call:
+            const dataEncode = api2.tx.balances.transfer(
+              {
+                Id: this.addr
+              },
+                this.sum
+            )
+            
+            const dataHash = dataEncode.method.toHex()
+
+            api.tx.xcmTransactor.transactThroughDerivative(
+              "Relay",
+              this.accIndex,
+              {
+                currency: {
+                  AsCurrencyId: {
+                    ForeignAsset: this.assetId                  //ASSET ID HERE
+                  }
+                },
+                feeAmount: null
+              },
+              dataHash,    //INNER CALL HERE
+              {
+                transactRequiredWeightAtMost: 1000000000000,
+                overallWeight: null
+              }
+            ).signAndSend//METAMASK INJECT HERE
+          }
         }
       }
     })
