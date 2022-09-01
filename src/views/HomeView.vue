@@ -17,7 +17,7 @@ export default {
             carousels: [
                 {
                     title: 'Slide 1',
-                    image: require("@/assets/moondo.png")
+                    image: require("@/assets/main.png")
                 },                {
                     title: 'Slide 2',
                     image: require("@/assets/moondo.png")

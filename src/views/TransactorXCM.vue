@@ -27,17 +27,28 @@
         <b-input expanded @input.native="sumSub($event)" v-model="sum"></b-input>
       </b-field>
 
+      <b-field v-if="operation == 'XCM transfer'" class="textt" label-position="inside" label="Provide destination address">
+        <b-input expanded @input.native="addrSub($event)" v-model="addr"></b-input>
+      </b-field>
+
+      <b-field v-if="operation == 'XCM transfer'" class="textt" label-position="inside" label="Provide destination parachain ID (Make sure it is connected to Relay by Channel)">
+        <b-input expanded @input.native="paraSub($event)" v-model="paraID"></b-input>
+      </b-field>
+
+      <b-field v-if="operation == 'XCM transfer'" class="textt" label-position="inside" label="Provide sum you wish to transfer">
+        <b-input expanded @input.native="sumSub($event)" v-model="sum"></b-input>
+      </b-field>
+
       <b-button class="buttonn" pack="fas" icon-right="file-import" expanded type="is-primary" @click="sendXCM($store.state.account)">Create call</b-button>
     
     </div>
   </template>
   
   <script lang="ts">
-    import { Keyring } from '@polkadot/api'
     import { ApiPromise, WsProvider } from '@polkadot/api'
     import { defineComponent } from '@vue/composition-api'
-    import { decodeAddress } from '@polkadot/util-crypto'
-    import { web3FromAddress } from "@polkadot/extension-dapp"
+    import { decodeAddress, evmToAddress } from '@polkadot/util-crypto'
+    import { web3Accounts, web3Enable, web3FromAddress, web3ListRpcProviders, web3UseRpcProvider } from '@polkadot/extension-dapp';
     import '@polkadot/api-augment';
 
     export default defineComponent({
@@ -45,6 +56,7 @@
       data() {
         return {
             addr: "" as string,
+            paraID: 0 as number,
             sum: 0 as number,
             assetId: 0 as number,
             accIndex: 0 as number,
@@ -56,6 +68,7 @@
       mounted: async function () {
 
         this.operations.push("Balance transfer")
+        this.operations.push("XCM transfer")
       },
   
       methods: {
@@ -64,6 +77,9 @@
           this.accIndex=value.target.value
         },
 
+        async paraSub(value: any){
+          this.paraID=value.target.value
+        },
         async sumSub(value: any){
           this.sum=value.target.value
         },
@@ -94,18 +110,22 @@
           const wsProvider2 = new WsProvider('wss://frag-moonbase-relay-rpc-ws.g.moonbase.moonbeam.network');
           const api2 = await ApiPromise.create({ provider: wsProvider });
           
+          var counter = 0
+
+          const allInjected = await web3Enable('my cool dapp');
+          const injector = await web3FromAddress(address); 
+
           if(this.operation == "Balance transfer"){
 
             //Calculate encoded data for balance transfer call:
-            const dataEncode = api2.tx.balances.transfer(
-              {
-                Id: this.addr
-              },
-                this.sum
-            )
+            /*const dataEncode = api2.tx.balances.transfer(
+            {
+              Address32: api2.createType("AccountId20", decodeAddress(this.addr)).toHex()
+            },
+              this.sum
+            ) */
             
-            const dataHash = dataEncode.method.toHex()
-
+            //const dataHash = dataEncode.method.toHex()
             api.tx.xcmTransactor.transactThroughDerivative(
               "Relay",
               this.accIndex,
@@ -117,13 +137,92 @@
                 },
                 feeAmount: null
               },
-              dataHash,    //INNER CALL HERE
+              "0x04000084fc49ce30071ea611731838cc7736113c1ec68fbc47119be8a0805066df9b2b070010a5d4e8",    //INNER CALL HERE
               {
                 transactRequiredWeightAtMost: 1000000000000,
                 overallWeight: null
               }
-            ).signAndSend//METAMASK INJECT HERE
+            ).signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
+              if(counter == 0){    
+                this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                counter++
+              }
+              if (status.isFinalized) {
+                this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+              }
+            })
           }
+          if(this.operation == "XCM transfer"){
+
+            //Calculate encoded data for balance transfer call:
+            /*const dataEncode = api2.tx.xcmPallet.reserveTransferAssets(
+            {
+              V1: {
+                parents: 0,
+                interior: {
+                  X1: {
+                    Parachain: this.paraID
+                  }
+                }
+              }
+            },
+            {
+              V1: {
+                parents: 0,
+                interior: {
+                  X1: {
+                    AccountKey: {
+                      network: "Any",
+                      key: this.addr
+                    }
+                  }
+                }
+              }
+            },
+            {
+              V1: [
+                {
+                  id: {
+                    Concrete: {
+                      parents: 0,
+                      interior: "Here"
+                    }
+                  }
+                  fun: {
+                    Fungible: this.sum
+                  }
+                }
+              ]
+            },0
+            ).signAndSend(*/
+
+            //const dataHash = dataEncode.method.toHex()
+            api.tx.xcmTransactor.transactThroughDerivative(
+              "Relay",
+              this.accIndex,
+              {
+                currency: {
+                  AsCurrencyId: {
+                    ForeignAsset: this.assetId                  //ASSET ID HERE
+                  }
+                },
+                feeAmount: null
+              },
+              "0x04000084fc49ce30071ea611731838cc7736113c1ec68fbc47119be8a0805066df9b2b070010a5d4e8",    //INNER CALL HERE
+              {
+                transactRequiredWeightAtMost: 1000000000000,
+                overallWeight: null
+              }
+            ).signAndSend(evmToAddress(address), { signer: injector.signer }, ({ status, txHash }) => {
+              if(counter == 0){    
+                this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                counter++
+              }
+              if (status.isFinalized) {
+                this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+              }
+            })
+            }
         }
       }
     })

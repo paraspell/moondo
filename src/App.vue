@@ -8,9 +8,10 @@
         <b-navbar-item style = "margin-left: 2%;" class="top" tag="router-link" to="/" type="is-link">Home</b-navbar-item>
         <b-navbar-item class="top" tag="router-link" to="/sovereign" type="is-link">Generate sovereign</b-navbar-item>
         <b-navbar-item class="top" tag="router-link" to="/transactor" type="is-link">Transactor XCM</b-navbar-item>
-        <b-navbar-item style = "margin-top: 0.2%; margin-left: 5%;" @click="connect">Connect Metamask<b-icon style="margin-left:5px;" size="is-small" pack="fas" icon="wallet"></b-icon></b-navbar-item>
+        <b-navbar-item style = "margin-top: 0.2%; margin-left: 5%;" @click="isCardModalActive = true">Connect account<b-icon style="margin-left:5px;" size="is-small" pack="fas" icon="wallet"></b-icon></b-navbar-item>
       </template>
     </b-navbar>
+    <router-view/>
     <b-modal v-model="isCardModalActive" :width="640" scroll="keep">
       <b-message 
         title="Info" 
@@ -21,23 +22,17 @@
         <option v-for="(account, index) in accounts" :key="index">{{account}}</option>
       </b-select>
     </b-modal>
-    <router-view/>
-    <vue-metamask ref="metamask" :initConnect="false"></vue-metamask>
     <notifications/>
   </div>
 </template>
 
 <script>
-  import { web3Accounts, web3Enable } from "@polkadot/extension-dapp"
   import { defineComponent } from '@vue/composition-api'
   import '@polkadot/api-augment';
   import store from './store';
-  import VueMetamask from 'vue-metamask';
+  import { web3Accounts, web3Enable } from "@polkadot/extension-dapp" 
 
   export default defineComponent({
-    components: {
-            VueMetamask,
-        },
     data() {
       return {
         login: "",   //Currently logged account
@@ -46,19 +41,16 @@
       };
     },
     mounted: async function () {
-
       //Connect injected wallets that are available
       const extensions = await web3Enable("PolkadotJS")
       if(extensions.length == 0) {
         this.$notify({ title: 'Error', text: 'You do not have PolkadotJS extension make sure to install one if you want to use your wallet.', type: 'error', duration: 8000,speed: 100})
         return
       }
-
       //Collect injected wallets
       this.accounts = await web3Accounts()
     },
     methods:{
-
       //Used to extract address from injected wallet login
       async accountLogin(value){
         var accSplit = value.target.value.split('{ "address": "')
@@ -66,15 +58,12 @@
         accSplit = accSplit[0].split('"')
         this.loginn(accSplit[0])
       },
-
-      connect() {
-                this.$refs.metamask.init();
-      },
-      //Used to save logged account for XCM screens
+      
       async loginn(value){
         this.login=value
         store.commit('saveAccount', this.login)
       },  
+
     }
   })
 </script>
