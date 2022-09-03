@@ -20,11 +20,11 @@ export default {
                     image: require("@/assets/main.png")
                 },                {
                     title: 'Slide 2',
-                    image: require("@/assets/moondo.png")
+                    image: require("@/assets/second.png")
                 },
                 {
                     title: 'Slide 3',
-                    image: require("@/assets/moondo.png")
+                    image: require("@/assets/third.png")
                 },
             ]
         }
