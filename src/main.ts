@@ -7,7 +7,8 @@ import 'buefy/dist/buefy.css'
 import VueCompositionAPI from '@vue/composition-api'
 import Notifications from 'vue-notification'
 import Buefy from 'buefy';
-
+import Clipboard from 'v-clipboard'
+ 
 import { library } from '@fortawesome/fontawesome-svg-core';
 // internal icons
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +18,7 @@ library.add(fas);
 Vue.component('vue-fontawesome', FontAwesomeIcon);
 Vue.use(Notifications)
 Vue.use(VueCompositionAPI)
+Vue.use(Clipboard)
 Vue.use(Buefy, {
   defaultIconComponent: "vue-fontawesome",
   defaultIconPack: "fas",

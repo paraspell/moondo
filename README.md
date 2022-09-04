@@ -31,19 +31,15 @@ Make sure to import Alice account which has permission to execute XCM Transactor
 ### Getting back-end to work
 First we start by installing necessary libraries
 ```
-sudo apt install git make
+sudo apt install git
 ```
 Ensure you have latest node.js installed if not use following command
 ```
 sudo n stable
 ```
-Pulling repositories necessary for backend and compiling them
+Clone this repository with command
 ```
-make install
-```
-Launching back-end
-```
-make launch
+git clone https://github.com/dudo50/MoonDo.git
 ```
 
 ### Importing Alice on Moonbase Alpha
