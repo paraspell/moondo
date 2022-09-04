@@ -28,7 +28,7 @@ In the picture below on the left is the amount of data Moon🌕️Do requires & 
 
 Make sure to import Alice account which has permission to execute XCM Transactor calls on Moonbase Alpha into your wallet. These permissions can only be received by governance vote.
 
-### Getting back-end to work
+### Getting local repository ready 
 First we start by installing necessary libraries
 ```
 sudo apt install git
