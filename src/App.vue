@@ -16,7 +16,7 @@
       <b-message 
         title="Info" 
         type="is-info" 
-        aria-close-label="Close message">Select account you wish to login with and then close this popup by clicking anywhere around these boxes.
+        aria-close-label="Close message">NOTICE: PLEASE USE TALISMAN WALLET, OTHER WALLETS ARE NOT COMPATIBLE WITH XCM TRANSACTOR PALLET CURRENTLY!<br> Select account you wish to login with and then close this popup by clicking anywhere around these boxes.
       </b-message>
       <b-select placeholder="Select account" expanded style="text-align: center;" @input.native="accountLogin($event)" required>
         <option v-for="(account, index) in accounts" :key="index">{{account}}</option>
