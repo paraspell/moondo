@@ -47,8 +47,7 @@
   <script lang="ts">
     import { ApiPromise, WsProvider } from '@polkadot/api'
     import { defineComponent } from '@vue/composition-api'
-    import { decodeAddress, evmToAddress } from '@polkadot/util-crypto'
-    import { web3Accounts, web3Enable, web3FromAddress, web3ListRpcProviders, web3UseRpcProvider } from '@polkadot/extension-dapp';
+    import {  web3FromAddress } from '@polkadot/extension-dapp';
     import '@polkadot/api-augment';
 
     export default defineComponent({
@@ -80,18 +79,25 @@
         async paraSub(value: any){
           this.paraID=value.target.value
         },
+
         async sumSub(value: any){
           this.sum=value.target.value
         },
+
         async addrSub(value: any){
           this.addr=value.target.value
         },
+
         async asstID(value: any){
           this.assetId=value.target.value
         },
+
         async asignOper(value: any){
           this.operation=value.target.value
         },
+
+        //________________________________________________________________________________
+        //COUPLE OF USEFUL DETAILS FOR DEVELOPMENT
 
         //ACCOUNT REGISTERED ON MOONBASE ALPHA TESTNET THAT HAS SUDO DETAILS:
         // PRIVATE KEY 0x28194e8ddb4a2f2b110ee69eaba1ee1f35e88da2222b5a7d6e3afa14cf7a3347
@@ -103,29 +109,34 @@
         //MOONBASE ALPHA WSS - wss://wss.api.moonbase.moonbeam.network
         //MOONBASE RELAY WSS - wss://frag-moonbase-relay-rpc-ws.g.moonbase.moonbeam.network
 
+        //_________________________________________________________________________________
+
+
         async sendXCM(address: string){
           const wsProvider = new WsProvider('wss://wss.api.moonbase.moonbeam.network');
           const api = await ApiPromise.create({ provider: wsProvider });
 
           const wsProvider2 = new WsProvider('wss://frag-moonbase-relay-rpc-ws.g.moonbase.moonbeam.network');
-          const api2 = await ApiPromise.create({ provider: wsProvider });
+          const api2 = await ApiPromise.create({ provider: wsProvider2 });
           
           var counter = 0
 
-          const allInjected = await web3Enable('my cool dapp');
           const injector = await web3FromAddress(address); 
 
+
+          //BALANCE TRANSFER SCENARIO --DONE
           if(this.operation == "Balance transfer"){
 
             //Calculate encoded data for balance transfer call:
-            /*const dataEncode = api2.tx.balances.transfer(
+            const dataEncode = api2.tx.balances.transfer(
             {
-              Address32: api2.createType("AccountId20", decodeAddress(this.addr)).toHex()
+              Id: this.addr
             },
               this.sum
-            ) */
+            ) 
             
-            //const dataHash = dataEncode.method.toHex()
+            const dataHash = dataEncode.method.toHex()
+            
             api.tx.xcmTransactor.transactThroughDerivative(
               "Relay",
               this.accIndex,
@@ -137,9 +148,9 @@
                 },
                 feeAmount: null
               },
-              "0x04000084fc49ce30071ea611731838cc7736113c1ec68fbc47119be8a0805066df9b2b070010a5d4e8",    //INNER CALL HERE
+              dataHash,    //INNER CALL HERE
               {
-                transactRequiredWeightAtMost: 1000000000000,
+                transactRequiredWeightAtMost: 1000000000,
                 overallWeight: null
               }
             ).signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
@@ -152,10 +163,14 @@
               }
             })
           }
+
+
+
+          //XCM TRANSFER SCENARIO - DONE
           if(this.operation == "XCM transfer"){
 
             //Calculate encoded data for balance transfer call:
-            /*const dataEncode = api2.tx.xcmPallet.reserveTransferAssets(
+            const dataEncode = api2.tx.xcmPallet.reserveTransferAssets(
             {
               V1: {
                 parents: 0,
@@ -171,7 +186,7 @@
                 parents: 0,
                 interior: {
                   X1: {
-                    AccountKey: {
+                    AccountKey20: {
                       network: "Any",
                       key: this.addr
                     }
@@ -187,16 +202,17 @@
                       parents: 0,
                       interior: "Here"
                     }
-                  }
+                  },
                   fun: {
                     Fungible: this.sum
                   }
                 }
               ]
             },0
-            ).signAndSend(*/
+            )
 
-            //const dataHash = dataEncode.method.toHex()
+            const dataHash = dataEncode.method.toHex()
+
             api.tx.xcmTransactor.transactThroughDerivative(
               "Relay",
               this.accIndex,
@@ -208,12 +224,12 @@
                 },
                 feeAmount: null
               },
-              "0x04000084fc49ce30071ea611731838cc7736113c1ec68fbc47119be8a0805066df9b2b070010a5d4e8",    //INNER CALL HERE
+              dataHash,    //INNER CALL HERE
               {
-                transactRequiredWeightAtMost: 1000000000000,
+                transactRequiredWeightAtMost: 1000000000,
                 overallWeight: null
               }
-            ).signAndSend(evmToAddress(address), { signer: injector.signer }, ({ status, txHash }) => {
+            ).signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
               if(counter == 0){    
                 this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
                 counter++

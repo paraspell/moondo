@@ -53,6 +53,8 @@ Alice account index: 42                                                         
 ```
 Once you enter private key and submit, you should receive JSON file. This JSON file can be imported to wallet to import Alice account into it.
 
+#### PLEASE NOTE: Currently TransactorXCM calls can only be executed through Talisman wallet as there is an open PR issue with Polkadot JS wallet & AccountKey20 address types. Talisman however works perfectly!
+
 ### After the repository is cloned proceed to install application dependencies with
 ```
 npm install
