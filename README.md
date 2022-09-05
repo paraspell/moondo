@@ -8,7 +8,7 @@
 
 
 # 1. Introduction
-Application is deployed & able to be previewed on following link - [TBA]()
+Application is deployed & able to be previewed on following link - [Try out Moon🌕️Do on Heroku](https://moondo.herokuapp.com/)
 
 Moon🌕️Do is XCM Transactor related UI enhancement tool, that also implements Sovereign account generator. It is designed to save users time not requiring as many details as it would be necessary to execute XCM Transactor call. All features are designed to be easily found & used right away. 
 
