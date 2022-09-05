@@ -66,5 +66,5 @@ npm run serve
 ```
 ### Building application for production
 ```
-npm start
+npm build
 ```
