@@ -10,19 +10,25 @@
 # 1. Introduction
 Application is deployed & able to be previewed on following link - [Try out Moon🌕️Do on Heroku](https://moondo.herokuapp.com/)
 
-Moon🌕️Do is XCM Transactor related UI enhancement tool, that also implements Sovereign account generator. It is designed to save users time not requiring as many details as it would be necessary to execute XCM Transactor call. All features are designed to be easily found & used right away. 
+Moon🌕️Do is XCM enhancement tool built in mind with Moonbeam network. Tool includes UI enhancement of XCM Transactor that can perform XCM calls or Balance transfers, generating Sovereign account details & Axelar's GMP XCM transfer capability from Moonbeam to other compatible nodes. Moon🌕️Do is designed to save users time not requiring as many details as it would be necessary to execute tasks through Polkadot UI/ Axelar's test UI. All features are designed to be easily found & used right away. 
 
 # 2. Overview
-There are not that many XCM Transactor and Sovereign account generating UI tools focusing on enhancing this technology. Moon🌕️Do focuses on ease of use, being fast, secure & user friendly. User no longer needs to go through a lengthy process to generate a sovereign account manually. They can do it with a few specific details & simple click of a button. Moreover, they can execute XCM or many else calls with XCM Transactor from a different chain with a user-friendly UI.
+There are not that many UI XCM Tools focusing on Moonbeam's XCM Transactor, Axelar's GMP or Sovereign account generating. Moon🌕️Do focuses on ease of use, being fast, secure & user friendly. User no longer needs to go through a lengthy process to generate a sovereign account manually. They can do it with a few specific details & simple click of a button. Moreover, they can execute XCM or many else calls with XCM Transactor from a different chain with a user-friendly UI. Lastly, user can use Axelar's GMP technology to pass assets between Moonbeam & other supported nodes.
 
-The project allows user to start Application, that can right out of the box generate sovereign account addresses for cross-chain transfers to/from the Relay chain. User can also create XCM Transactor calls from Parachain to do actions on the Relay chain. Currently available call options that can be executed through XCM Transactor from Moonbase Alpha Parachain:
+The project allows user to start Application, that can right out of the box generate sovereign account addresses for cross-chain transfers to/from the Relay chain. User can also create XCM Transactor calls from Parachain to do actions on the Relay chain. 
+Currently available call options that can be executed through XCM Transactor from Moonbase Alpha Parachain:
+- XCM Transfer Call from Relay Chain to any Parachain connected with HRMP channels
+- Balance transfer between Relay Chain accounts
 
-XCM Transfer Call from Relay Chain to any Parachain connected with HRMP channels
-Balance transfer between Relay Chain accounts
-Instead of filling lengthy calls Moon🌕️Do fills them for you. This for example involves constructing API calls you wish to perform on the Relay chain and computing encoded call data from them. This encoded call data is then used in call executed on Parachain.
+Another beneficial feature is Axelar's GMP to transfer assets cross-chain between Moonbeam & other supported nodes.
+
+Every screen has notifications for important actions (eg. copied address to clipboard, information, that sovereign addresses are generating, information about block finalization of XCM Transactor call, information about tx hash of XCM Transaction call).
+
+Instead of filling lengthy calls Moon🌕️Do fills them for you. This for example involves constructing API calls you wish to perform on the Relay chain and computing encoded call data from them. This encoded call data is then used in a call executed on Parachain (XCM Transactor scenario).
 
 In the picture below on the left is the amount of data Moon🌕️Do requires & on right is the amount of data you would have to fill to create two calls necessary for XCM call execution through XCM Transactor pallet. You can click on the image to see it in full resolution.
 [![comparison](https://raw.githubusercontent.com/dudo50/MoonDo/main/img/comparisonimg.jpg)](https://raw.githubusercontent.com/dudo50/MoonDo/main/img/comparisonimg.jpg)
+This is what Moon🌕️Do focuses on with all other scenarios as well.
 
 # 3. Installation for local use
 
@@ -67,4 +73,8 @@ npm run serve
 ### Building application for production
 ```
 npm build
+```
+### Running localhost application with Axelar's GMP
+```
+TBA
 ```
