@@ -30,13 +30,13 @@
   </template>
   <script lang="ts">
     import { defineComponent } from '@vue/composition-api'
-    import { wallet, isTestnet } from "./moondo-Axelar-GMP/config/constants";
+    import { wallet, isTestnet } from "../../moondo-Axelar-GMP/config/constants";
     import {
       sendTokenToDestChain,
       getBalance,
       generateRecipientAddress,
       truncatedAddress,
-    } from "./moondo-Axelar-GMP/utils";
+    } from "../../moondo-Axelar-GMP/utils";
     
     export default defineComponent({
   
