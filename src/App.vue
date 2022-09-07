@@ -5,9 +5,10 @@
         <h1 style="margin-top: 0.5% ;" class="name first" >Moon</h1>
         <img class="mainLogo rotate" src="./assets/moondo.png" />
         <h1 style="margin-top: 0.5% ;margin-right: 2%;" class="name first" >Do</h1>
-        <b-navbar-item style = "margin-left: 2%;" class="top" tag="router-link" to="/" type="is-link">Home</b-navbar-item>
-        <b-navbar-item class="top" tag="router-link" to="/sovereign" type="is-link">Generate sovereign</b-navbar-item>
+        <b-navbar-item  class="top" tag="router-link" to="/" type="is-link">Home</b-navbar-item>
+        <b-navbar-item class="top" tag="router-link" to="/gmp" type="is-link">GMP Transfer</b-navbar-item>
         <b-navbar-item class="top" tag="router-link" to="/transactor" type="is-link">Transactor XCM</b-navbar-item>
+        <b-navbar-item class="top" tag="router-link" to="/sovereign" type="is-link">Generate sovereign</b-navbar-item>
         <b-navbar-item style = "margin-top: 0.2%; margin-left: 5%;" @click="isCardModalActive = true">Connect account<b-icon style="margin-left:5px;" size="is-small" pack="fas" icon="wallet"></b-icon></b-navbar-item>
       </template>
     </b-navbar>
