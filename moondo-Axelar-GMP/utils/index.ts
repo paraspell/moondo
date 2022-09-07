@@ -12,9 +12,7 @@ import MessageReceiverContract from "../artifacts/contracts/MessageReceiver.sol/
 import IERC20 from "../artifacts/@axelar-network/axelar-gmp-sdk-solidity/contracts/interfaces/IERC20.sol/IERC20.json";
 import { isTestnet, wallet } from "../config/constants";
 
-let chains = isTestnet
-  ? require("../config/testnet.json")
-  : require("../config/local.json");
+let chains = require("../config/local.json");
 
 const moonbeamChain = chains.find(
   (chain: any) => chain.name === "Moonbeam",
@@ -181,10 +179,9 @@ export function generateRecipientAddress(): string {
 
 export async function sendTokenToDestChain(
   amount: string,
-  recipientAddress: string,
+  recipientAddress: string[],
   originChain: string,
   destinationChain: string,
-  onSent: (txhash: string) => void,
 ) {
 
   // Get token address from the gateway contract
@@ -417,7 +414,7 @@ export async function sendTokenToDestChain(
   console.log({
     txHash: receipt.transactionHash,
   });
-  onSent(receipt.transactionHash);
+  //onSent(receipt.transactionHash);
 
 
   var contractD: any
@@ -443,7 +440,6 @@ export async function sendTokenToDestChain(
   // Wait destination contract to execute the transaction.
   return new Promise((resolve, reject) => {
 
-    //REPLACE THIS
     contractD.on("Executed", () => {
       contractD.removeAllListeners("Executed");
       resolve(null);

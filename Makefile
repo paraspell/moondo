@@ -12,4 +12,4 @@ deployAxelarContracts:
 .PHONY: relaunchAxelar
 
 relaunchAxelar:
-	npm run local-dev:start
+	cd moondo-Axelar-GMP && npm run local-dev:start

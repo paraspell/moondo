@@ -22,7 +22,7 @@
         <b-input expanded @input.native="sumAssign($event)" v-model="sum"></b-input>
       </b-field>
 
-      <b-button class="buttonn" pack="fas" icon-right="file-import" expanded type="is-primary" @click="">Send transaction</b-button>
+      <b-button class="buttonn" pack="fas" icon-right="file-import" expanded type="is-primary" @click="transfer()">Send transaction</b-button>
 
       
 
@@ -45,8 +45,10 @@
             items: [] as Array<string>,  
             key: "" as string,   
             keyy: "" as string,   
-            sum: 0 as number,   
+            sum: "" as string,   
             addr: "" as string,   
+            txhash: "" as any,
+            
           };
         },
       mounted: async function () {
@@ -57,9 +59,27 @@
         this.items.push("Polygon")
       },
       methods: {
+        async transfer(){
+          if(this.items.length == 0 || this.key == "" || this.keyy == "" || this.sum == "" || this.addr == "")
+          {
+            this.$notify({ text: 'You did not specify required details!.', type: 'error', duration: 8000,speed: 100})
+            return
+          }
+          this.$notify({ text: 'Your transaction is processing!.', duration: 8000,speed: 100})
+          this.txhash = await sendTokenToDestChain(this.sum, [this.addr], this.key, this.keyy)
+          this.$notify({ text: 'Your transaction is processed!.', type:"success", duration: 8000,speed: 100})
+          const _balances = await getBalance([this.addr], "EthereumDES");
+          console.log(_balances)
+        },
+
         async addrAssign(value: any){
           this.addr=value.target.value
         },
+
+        async setTxHash(value: any){
+          this.txhash=value.target.value
+        },
+
         async sumAssign(value: any){
           this.sum=value.target.value
         },
