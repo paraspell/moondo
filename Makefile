@@ -8,3 +8,8 @@ installAxelarGMP:
 deployAxelarContracts:
 	cd moondo-Axelar-GMP && npm run contracts:build && npm run contracts:deploy
 	npm run serve
+
+.PHONY: relaunchAxelar
+
+relaunchAxelar:
+	npm run local-dev:start

@@ -65,6 +65,18 @@ Once you enter private key and submit, you should receive JSON file. This JSON f
 ```
 npm install
 ```
+### Running localhost network with Axelar's GMP
+```
+make installAxelarGMP
+```
+### Deploying contracts necessary to run for Axelar's GMP
+```
+make deployAxelarContracts
+```
+### Launch localhost network after it was put down
+```
+make relaunchAxelar
+```
 
 ### Launching application after dependencies are installed
 ```
@@ -73,8 +85,4 @@ npm run serve
 ### Building application for production
 ```
 npm build
-```
-### Running localhost application with Axelar's GMP
-```
-TBA
 ```
