@@ -37,7 +37,7 @@ Make sure to import Alice account which has permission to execute XCM Transactor
 ### Getting local repository ready 
 First we start by installing necessary libraries
 ```
-sudo apt install git
+sudo apt install git make
 ```
 Ensure you have latest node.js installed if not use following command
 ```
