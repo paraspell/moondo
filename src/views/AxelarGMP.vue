@@ -1,7 +1,7 @@
 <template>
     <div id="app">
 
-      <b-field style ="margin-top: 30%; " class="textt"  label-position="inside" label="Select origin chain">
+      <b-field style ="margin-top: 10%; " class="textt"  label-position="inside" label="Select origin chain">
         <b-select expanded v-model="key" placeholder="Select parachain 1" required>
           <option v-for="(item) in items" :key="item">{{item}}</option>
         </b-select>
@@ -24,7 +24,26 @@
 
       <b-button class="buttonn" pack="fas" icon-right="file-import" expanded type="is-primary" @click="transfer()">Send transaction</b-button>
 
-      
+      <b-field style ="margin-top: 15%; " class="textt"  label-position="inside" label="Select chain">
+        <b-select expanded v-model="selectedPrefundChain" placeholder="Select parachain 1" required>
+          <option v-for="(acc) in prefundedAccChain" :selectedPrefundChain="acc">{{acc}}</option>
+        </b-select>
+      </b-field>
+
+      <b-field class="textt"  label-position="inside" label="Select option">
+        <b-select expanded v-model="option" required>
+          <option v-for="(acc) in options" :option="acc">{{acc}}</option>
+        </b-select>
+      </b-field>
+
+      <b-field v-if="option == 'Your account address balance'" class="textt" label-position="inside" label="Provide your account address">
+        <b-input expanded @input.native="addressSub($event)" v-model="balanceAddr"></b-input>
+      </b-field>
+
+      <b-button class="buttonn" pack="fas" icon-right="file-import" expanded type="is-primary" @click="displayBallance()">Display ballance</b-button>
+
+      <h1 v-if="currentBallance != ''" class="text">Selected account ballance on {{selectedPrefundChain}} is {{currentBallance}} aUSDC</h1>
+
 
     </div>
   </template>
@@ -42,12 +61,18 @@
   
       data() {
         return {
+            prefundedAccChain: [] as Array<string>,
             items: [] as Array<string>,  
+            selectedPrefundChain: "" as string,
+            options: [] as Array<string>,
+            option: "" as string,
+            balanceAddr: "" as string,
             key: "" as string,   
             keyy: "" as string,   
             sum: "" as string,   
             addr: "" as string,   
             txhash: "" as any,
+            currentBallance: "" as string,
             
           };
         },
@@ -57,6 +82,15 @@
         this.items.push("Ethereum")
         this.items.push("Fantom")
         this.items.push("Polygon")
+
+        this.prefundedAccChain.push("Moonbeam")
+        this.prefundedAccChain.push("Avalanche")
+        this.prefundedAccChain.push("Ethereum")
+        this.prefundedAccChain.push("Fantom")
+        this.prefundedAccChain.push("Polygon")
+
+        this.options.push("Prefunded account ballance")
+        this.options.push("Your account address balance")
       },
       methods: {
         async transfer(){
@@ -68,8 +102,54 @@
           this.$notify({ text: 'Your transaction is processing!.', duration: 8000,speed: 100})
           this.txhash = await sendTokenToDestChain(this.sum, [this.addr], this.key, this.keyy)
           this.$notify({ text: 'Your transaction is processed!.', type:"success", duration: 8000,speed: 100})
-          const _balances = await getBalance([this.addr], "EthereumDES");
-          console.log(_balances)
+        },
+
+        async displayBallance(){
+          if(this.option == 'Your account address balance'){
+            if(this.selectedPrefundChain == "Moonbeam"){
+              const _balances = await getBalance([this.balanceAddr], "MoonbeamDES");
+               this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Ethereum"){
+              const _balances = await getBalance([this.balanceAddr], "EthereumDES");
+              this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Fantom"){
+              const _balances = await getBalance([this.balanceAddr], "FantomDES");
+              this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Avalanche"){
+              const _balances = await getBalance([this.balanceAddr], "AvalancheDES");
+              this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Polygon"){
+              const _balances = await getBalance([this.balanceAddr], "PolygonDES");
+              this.currentBallance = _balances[0]
+            }
+          }
+
+          else if(this.option == 'Prefunded account ballance'){
+            if(this.selectedPrefundChain == "Moonbeam"){
+              const _balances = await getBalance([wallet.address], "MoonbeamSRC");
+               this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Ethereum"){
+              const _balances = await getBalance([wallet.address], "EthereumSRC");
+              this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Fantom"){
+              const _balances = await getBalance([wallet.address], "FantomSRC");
+              this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Avalanche"){
+              const _balances = await getBalance([wallet.address], "AvalancheSRC");
+              this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Polygon"){
+              const _balances = await getBalance([wallet.address], "PolygonSRC");
+              this.currentBallance = _balances[0]
+            }
+          }
         },
 
         async addrAssign(value: any){
@@ -82,6 +162,10 @@
 
         async sumAssign(value: any){
           this.sum=value.target.value
+        },
+
+        async addressSub(value: any){
+          this.balanceAddr=value.target.value
         },
       }
   })
@@ -117,7 +201,7 @@
     }
     .text{
       color: black;
-      font-family: "Anybody", cursive;
+      font-family: "Pacifico", cursive;
       font-size: 20px;
       margin-top: 15px;
     }
