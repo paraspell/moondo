@@ -96,12 +96,12 @@
         async transfer(){
           if(this.items.length == 0 || this.key == "" || this.keyy == "" || this.sum == "" || this.addr == "")
           {
-            this.$notify({ text: 'You did not specify required details!.', type: 'error', duration: 8000,speed: 100})
+            this.$notify({ text: 'You did not specify required details!', type: 'error', duration: 8000,speed: 100})
             return
           }
-          this.$notify({ text: 'Your transaction is processing!.', duration: 8000,speed: 100})
+          this.$notify({ text: 'Your transaction is processing!', duration: 8000,speed: 100})
           this.txhash = await sendTokenToDestChain(this.sum, [this.addr], this.key, this.keyy)
-          this.$notify({ text: 'Your transaction is processed!.', type:"success", duration: 8000,speed: 100})
+          this.$notify({ text: 'Your transaction is processed!', type:"success", duration: 8000,speed: 100})
         },
 
         async displayBallance(){
