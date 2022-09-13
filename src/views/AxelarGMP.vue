@@ -13,6 +13,15 @@
         </b-select>
       </b-field>
 
+      <b-field class="textt"  label-position="inside" label="Select account from which you transfer funds">
+        <b-select expanded v-model="optionAcc" required>
+          <option v-for="(opt) in optionAccs" :key="opt">{{opt}}</option>
+        </b-select>
+      </b-field>
+
+      <b-field v-if="optionAcc == 'From my own account'" class="textt"  label-position="inside" label="Provide your account address">
+        <b-input expanded @input.native="addrAssignOwn($event)" v-model="addrOwn"></b-input>
+      </b-field>
 
       <b-field class="textt"  label-position="inside" label="Provide account address">
         <b-input expanded @input.native="addrAssign($event)" v-model="addr"></b-input>
@@ -49,14 +58,11 @@
   </template>
   <script lang="ts">
     import { defineComponent } from '@vue/composition-api'
-    import { wallet, isTestnet } from "../../moondo-Axelar-GMP/config/constants";
+    import { wallet } from "../../moondo-Axelar-GMP/config/constants";
     import {
       sendTokenToDestChain,
       getBalance,
-      generateRecipientAddress,
-      truncatedAddress,
     } from "../../moondo-Axelar-GMP/utils";
-    
     export default defineComponent({
   
       data() {
@@ -66,7 +72,10 @@
             selectedPrefundChain: "" as string,
             options: [] as Array<string>,
             option: "" as string,
+            optionAcc: "" as string,
+            optionAccs: [] as Array<string>,
             balanceAddr: "" as string,
+            addrOwn: "" as string,
             key: "" as string,   
             keyy: "" as string,   
             sum: "" as string,   
@@ -91,6 +100,9 @@
 
         this.options.push("Prefunded account ballance")
         this.options.push("Your account address balance")
+        
+        this.optionAccs.push("From prefunded account")
+        this.optionAccs.push("From my own account")
       },
       methods: {
         async transfer(){
@@ -99,9 +111,62 @@
             this.$notify({ text: 'You did not specify required details!', type: 'error', duration: 8000,speed: 100})
             return
           }
-          this.$notify({ text: 'Your transaction is processing!', duration: 8000,speed: 100})
-          this.txhash = await sendTokenToDestChain(this.sum, [this.addr], this.key, this.keyy)
-          this.$notify({ text: 'Your transaction is processed!', type:"success", duration: 8000,speed: 100})
+          
+          var currentBallanc: any
+          if(this.key == "Moonbeam" && this.optionAcc == "From my own account"){
+            const _balances = await getBalance([this.addrOwn], "MoonbeamSRC");
+             currentBallanc = _balances[0]
+          }
+          else if(this.key == "Ethereum" && this.optionAcc == "From my own account"){
+            const _balances = await getBalance([this.addrOwn], "EthereumSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Fantom" && this.optionAcc == "From my own account"){
+            const _balances = await getBalance([this.addrOwn], "FantomSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Avalanche" && this.optionAcc == "From my own account"){
+            const _balances = await getBalance([this.addrOwn], "AvalancheSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Polygon" && this.optionAcc == "From my own account"){
+            const _balances = await getBalance([this.addrOwn], "PolygonSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Ethereum" && this.optionAcc == "From prefunded account"){
+            const _balances = await getBalance([wallet.address], "EthereumSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Fantom" && this.optionAcc == "From prefunded account"){
+            const _balances = await getBalance([wallet.address], "FantomSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Avalanche" && this.optionAcc == "From prefunded account"){
+            const _balances = await getBalance([wallet.address], "AvalancheSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Polygon" && this.optionAcc == "From prefunded account"){
+            const _balances = await getBalance([wallet.address], "PolygonSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Moonbeam" && this.optionAcc == "From prefunded account"){
+            const _balances = await getBalance([wallet.address], "MoonbeamSRC");
+            currentBallanc = _balances[0]
+          }
+          if(parseInt(currentBallanc) - parseInt(this.sum) < 0)
+          {
+            this.$notify({ text: 'Your transfer could not be processed due to insufficient funds on your account!', type:"error", duration: 8000,speed: 100})
+          }
+          else{
+            if(this.optionAcc == "From prefunded account"){
+              this.$notify({ text: 'Your transaction is processing!', duration: 8000,speed: 100})
+              this.txhash = await sendTokenToDestChain(this.sum, [this.addr], this.key, this.keyy)
+              this.$notify({ text: 'Your transaction is processed!', type:"success", duration: 8000,speed: 100})
+            }
+            else if(this.optionAcc == "From my own account"){
+              this.$notify({ text: 'This option is under construction, please use prefunded account!', duration: 8000,speed: 100})
+            }
+          }
         },
 
         async displayBallance(){
@@ -166,6 +231,10 @@
 
         async addressSub(value: any){
           this.balanceAddr=value.target.value
+        },
+
+        async addrAssignOwn(value: any){
+          this.addrOwn=value.target.value
         },
       }
   })
