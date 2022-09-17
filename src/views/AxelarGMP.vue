@@ -49,7 +49,7 @@
         <b-input expanded @input.native="addressSub($event)" v-model="balanceAddr"></b-input>
       </b-field>
 
-      <b-button class="buttonn" pack="fas" icon-right="file-import" expanded type="is-primary" @click="displayBallance()">Display ballance</b-button>
+      <b-button class="buttonn" pack="fas" icon-right="file-import" expanded type="is-primary" @click="displayBallance()">Display balance</b-button>
 
       <h1 v-if="currentBallance != ''" class="text">Selected account ballance on {{selectedPrefundChain}} is {{currentBallance}} aUSDC</h1>
 
