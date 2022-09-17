@@ -62,6 +62,7 @@
     import {
       sendTokenToDestChain,
       getBalance,
+sendTokenToDestChainFromOwnACC,
     } from "../../moondo-Axelar-GMP/utils";
     export default defineComponent({
   
@@ -165,6 +166,8 @@
             }
             else if(this.optionAcc == "From my own account"){
               this.$notify({ text: 'This option is under construction, please use prefunded account!', duration: 8000,speed: 100})
+              this.txhash = await sendTokenToDestChainFromOwnACC(this.sum, [this.addr], this.key, this.keyy, this.addrOwn)
+              this.$notify({ text: 'Your transaction is processed!', type:"success", duration: 8000,speed: 100})
             }
           }
         },
