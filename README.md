@@ -58,6 +58,7 @@ Alice address: 0x44236223aB4291b93EEd10E4B511B37a398DEE55                       
 Alice account index: 42                                                                 //Will be needed in application
 ```
 Once you enter private key and submit, you should receive JSON file. This JSON file can be imported to wallet to import Alice account into it.
+If Alice have no DEV tokens you can deposit them through [Moonbase faucet](https://apps.moonbeam.network/moonbase-alpha/faucet/)
 
 #### PLEASE NOTE: Currently TransactorXCM calls can only be executed through Talisman wallet as there is an open PR issue with Polkadot JS wallet & AccountKey20 address types. Talisman however works perfectly!
 
