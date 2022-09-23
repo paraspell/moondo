@@ -20,13 +20,15 @@ const polygonChain = chains.find((chain: any) => chain.name === "Polygon");
 const ethereumChain = chains.find((chain: any) => chain.name === "Ethereum");
 const fantomChain = chains.find((chain: any) => chain.name === "Fantom");
 const avalancheChain = chains.find((chain: any) => chain.name === "Avalanche");
+const auroraChain = chains.find((chain: any) => chain.name === "Aurora");
+const binanceChain = chains.find((chain: any) => chain.name === "Binance");
 
 // deploy script
 async function main() {
   /**
    * DEPLOY ON CHAINS
    */
-   const chainsFetched = [moonbeamChain, ethereumChain, fantomChain, avalancheChain, polygonChain];
+   const chainsFetched = [moonbeamChain, ethereumChain, fantomChain, avalancheChain, polygonChain, auroraChain, binanceChain];
   for(let x=0 ; chainsFetched.length> x; x++)
   {
     const chainProvider = getDefaultProvider(chainsFetched[x].rpc);

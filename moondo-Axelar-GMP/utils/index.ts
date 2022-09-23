@@ -28,8 +28,14 @@ const fantomChain = chains.find(
 const polygonChain = chains.find(
   (chain: any) => chain.name === "Polygon",
 ) as any;
+const auroraChain = chains.find(
+  (chain: any) => chain.name === "Aurora",
+) as any;
+const binanceChain = chains.find(
+  (chain: any) => chain.name === "Binance",
+) as any;
 
-if (!moonbeamChain || !avalancheChain || !ethereumChain || !fantomChain || !polygonChain ) process.exit(0);
+if (!moonbeamChain || !avalancheChain || !ethereumChain || !fantomChain || !polygonChain || !auroraChain || !binanceChain ) process.exit(0);
 
 const useMetamask = false; // typeof window === 'object';
 
@@ -41,10 +47,19 @@ const moonbeamConnectedWallet = useMetamask
   : wallet.connect(moonbeamProvider);
 const avalancheProvider = getDefaultProvider(avalancheChain.rpc);
 const avalancheConnectedWallet = wallet.connect(avalancheProvider);
+
 const ethereumProvider = getDefaultProvider(ethereumChain.rpc);
 const ethereumConnectedWallet = wallet.connect(ethereumProvider);
+
 const fantomProvider = getDefaultProvider(fantomChain.rpc);
 const fantomConnectedWallet = wallet.connect(fantomProvider);
+
+const auroraProvider = getDefaultProvider(auroraChain.rpc);
+const auroraConnectedWallet = wallet.connect(auroraProvider);
+
+const binanceProvider = getDefaultProvider(binanceChain.rpc);
+const binanceConnectedWallet = wallet.connect(binanceProvider);
+
 const polygonProvider = getDefaultProvider(polygonChain.rpc);
 const polygonConnectedWallet = wallet.connect(polygonProvider);
 
@@ -74,6 +89,16 @@ const srcGatewayContractMoonbeam = new Contract(
   AxelarGatewayContract.abi,
   moonbeamConnectedWallet,
 );
+const srcGatewayContractAurora = new Contract(
+  auroraChain.gateway,
+  AxelarGatewayContract.abi,      
+  auroraConnectedWallet,
+);
+const srcGatewayContractBinance = new Contract(
+  binanceChain.gateway,
+  AxelarGatewayContract.abi,
+  binanceConnectedWallet,
+);
 //________________________________________
 
 //_________________________________________
@@ -101,6 +126,16 @@ const destGatewayContractMoonbeam = new Contract(
   moonbeamChain.gateway,
   AxelarGatewayContract.abi,
   moonbeamConnectedWallet,
+);
+const destGatewayContractAurora = new Contract(
+  auroraChain.gateway,
+  AxelarGatewayContract.abi,
+  auroraConnectedWallet,
+);
+const destGatewayContractBinance = new Contract(
+  binanceChain.gateway,
+  AxelarGatewayContract.abi,
+  binanceConnectedWallet,
 );
 
 //_________________________________________
@@ -135,6 +170,17 @@ const sourceContractMoonbeam = new Contract(
   MessageSenderContract.abi,
   moonbeamConnectedWallet,
 );
+const sourceContractAurora = new Contract(
+  auroraChain.messageSender as string,
+  MessageSenderContract.abi,
+  auroraConnectedWallet,
+);
+
+const sourceContractBinance = new Contract(
+  binanceChain.messageSender as string,
+  MessageSenderContract.abi,
+  binanceConnectedWallet,
+);
 
 //__________________________________________
 
@@ -168,6 +214,17 @@ const destContractMoonbeam = new Contract(
   MessageReceiverContract.abi,
   moonbeamConnectedWallet,
 );
+const destContractAurora = new Contract(
+  auroraChain.messageReceiver as string,
+  MessageReceiverContract.abi,
+  auroraConnectedWallet,
+);
+
+const destContractBinance = new Contract(
+  binanceChain.messageReceiver as string,
+  MessageReceiverContract.abi,
+  binanceConnectedWallet,
+);
 
 //______________________________________________
 
@@ -195,6 +252,10 @@ export async function sendTokenToDestChain(
     tokenAddress = await srcGatewayContractFantom.tokenAddresses("aUSDC");
   else if(originChain == "Polygon")
     tokenAddress = await srcGatewayContractPolygon.tokenAddresses("aUSDC");
+  else if(originChain == "Aurora")
+    tokenAddress = await srcGatewayContractAurora.tokenAddresses("aUSDC");
+  else if(originChain == "Binance")
+    tokenAddress = await srcGatewayContractBinance.tokenAddresses("aUSDC");
 
   var erc20: any
   if(originChain == "Avalanche"){
@@ -232,6 +293,20 @@ export async function sendTokenToDestChain(
       ethereumConnectedWallet,
     );
   }
+  if(originChain == "Aurora"){
+      erc20 = new Contract(
+        tokenAddress,
+        IERC20.abi,
+        auroraConnectedWallet,
+      );
+  }
+  if(originChain == "Binance"){
+      erc20 = new Contract(
+        tokenAddress,
+        IERC20.abi,
+        binanceConnectedWallet,
+      );
+  }
 
   // Approve the token for the amount to be sent
   if(originChain == "Moonbeam"){
@@ -263,6 +338,16 @@ export async function sendTokenToDestChain(
       .approve(sourceContractFantom.address, ethers.utils.parseUnits(amount, 6))
       .then((tx: any) => tx.wait());
   }
+  else if(originChain == "Aurora"){
+    await erc20
+      .approve(sourceContractAurora.address, ethers.utils.parseUnits(amount, 6))
+      .then((tx: any) => tx.wait());
+  }
+  else if(originChain == "Binance"){
+    await erc20
+      .approve(sourceContractBinance.address, ethers.utils.parseUnits(amount, 6))
+      .then((tx: any) => tx.wait());
+  }
 
   const api = new AxelarQueryAPI({ environment: Environment.TESTNET });
 
@@ -291,6 +376,14 @@ export async function sendTokenToDestChain(
     currency = GasToken.MATIC
     senderChain = EvmChain.POLYGON
   }
+  else if(originChain == "Aurora"){
+    currency = GasToken.GLMR
+    senderChain = EvmChain.AURORA
+  }
+  else if(originChain == "Binance"){
+    currency = GasToken.MATIC
+    senderChain = EvmChain.BINANCE
+  }
 
   var destChain: any
   if(destinationChain == "Ethereum"){
@@ -307,6 +400,12 @@ export async function sendTokenToDestChain(
   }
   else if(destinationChain == "Polygon"){
     destChain = EvmChain.POLYGON
+  }
+  else if(destinationChain == "Aurora"){
+    destChain = EvmChain.AURORA
+  }
+  else if(destinationChain == "Binance"){
+    destChain = EvmChain.BINANCE
   }
 
   const gasFee = await api.estimateGasFee(
@@ -336,6 +435,13 @@ export async function sendTokenToDestChain(
 
   else if(originChain == "Fantom"){
     contractS = sourceContractFantom
+  }
+  else if(originChain == "Aurora"){
+    contractS = sourceContractAurora
+  }
+
+  else if(originChain == "Binance"){
+    contractS = sourceContractBinance
   }
 
 
@@ -409,6 +515,34 @@ export async function sendTokenToDestChain(
     )
     .then((tx: any) => tx.wait());
   }
+  else if(destinationChain == "Aurora"){
+    receipt = await contractS
+    .sendToMany(
+      destinationChain,
+      destContractAurora.address,
+      recipientAddress,
+      "aUSDC",
+      ethers.utils.parseUnits(amount, 6),
+      {
+        value: BigInt(isTestnet ? gasFee : 3000000),
+      },
+    )
+    .then((tx: any) => tx.wait());
+  }
+  else if(destinationChain == "Binance"){
+    receipt = await contractS
+    .sendToMany(
+      destinationChain,
+      destContractBinance.address,
+      recipientAddress,
+      "aUSDC",
+      ethers.utils.parseUnits(amount, 6),
+      {
+        value: BigInt(isTestnet ? gasFee : 3000000),
+      },
+    )
+    .then((tx: any) => tx.wait());
+  }
 
   console.log({
     txHash: receipt.transactionHash,
@@ -435,6 +569,13 @@ export async function sendTokenToDestChain(
 
   else if(destinationChain == "Fantom"){
     contractD = destContractFantom
+  }
+  else if(destinationChain == "Aurora"){
+    contractD = destContractAurora
+  }
+
+  else if(destinationChain == "Binance"){
+    contractD = destContractBinance
   }
   // Wait destination contract to execute the transaction.
   return new Promise((resolve, reject) => {
@@ -486,6 +627,18 @@ export async function getBalance(addresses: string[], isSource: string) {
   else if(isSource == "FantomDES"){
     contract = destGatewayContractFantom
   }
+  else if(isSource == "AuroraSRC"){
+    contract = srcGatewayContractAurora
+  }
+  else if(isSource == "AuroraDES"){
+    contract = destGatewayContractAurora
+  }
+  else if(isSource == "BinanceSRC"){
+    contract = srcGatewayContractBinance
+  }
+  else if(isSource == "BinanceDES"){
+    contract = destGatewayContractBinance
+  }
 
   var connectedWallet: any
   if(isSource == "MoonbeamSRC" || isSource == "MoonbeamDES"){
@@ -502,6 +655,12 @@ export async function getBalance(addresses: string[], isSource: string) {
   }
   if(isSource == "FantomSRC" || isSource == "FantomDES"){
     connectedWallet = fantomConnectedWallet
+  }
+  if(isSource == "AuroraSRC" || isSource == "AuroraDES"){
+    connectedWallet = auroraConnectedWallet
+  }
+  if(isSource == "BinanceSRC" || isSource == "BinanceDES"){
+    connectedWallet = binanceConnectedWallet
   }
 
   const tokenAddress = await contract.tokenAddresses("aUSDC");
@@ -878,6 +1037,7 @@ export async function sendTokenToDestChainFromOwnACC(
   else if(destinationChain == "Fantom"){
     contractD = destContractFantom2
   }
+  
   // Wait destination contract to execute the transaction.
   return new Promise((resolve, reject) => {
 

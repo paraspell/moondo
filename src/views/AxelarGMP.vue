@@ -23,7 +23,7 @@
         <b-input expanded @input.native="addrAssignOwn($event)" v-model="addrOwn"></b-input>
       </b-field>
 
-      <b-field class="textt"  label-position="inside" label="Provide account address">
+      <b-field class="textt"  label-position="inside" label="Provide destination account address">
         <b-input expanded @input.native="addrAssign($event)" v-model="addr"></b-input>
       </b-field>
   
@@ -87,17 +87,22 @@ sendTokenToDestChainFromOwnACC,
           };
         },
       mounted: async function () {
-        this.items.push("Moonbeam")
+        this.items.push("Aurora")
         this.items.push("Avalanche")
+        this.items.push("Binance")
         this.items.push("Ethereum")
         this.items.push("Fantom")
+        this.items.push("Moonbeam")
         this.items.push("Polygon")
 
-        this.prefundedAccChain.push("Moonbeam")
+        this.prefundedAccChain.push("Aurora")
         this.prefundedAccChain.push("Avalanche")
+        this.prefundedAccChain.push("Binance")
         this.prefundedAccChain.push("Ethereum")
         this.prefundedAccChain.push("Fantom")
+        this.prefundedAccChain.push("Moonbeam")
         this.prefundedAccChain.push("Polygon")
+
 
         this.options.push("Prefunded account ballance")
         this.options.push("Your account address balance")
@@ -134,6 +139,14 @@ sendTokenToDestChainFromOwnACC,
             const _balances = await getBalance([this.addrOwn], "PolygonSRC");
             currentBallanc = _balances[0]
           }
+          else if(this.key == "Aurora" && this.optionAcc == "From my own account"){
+            const _balances = await getBalance([this.addrOwn], "AuroraSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Binance" && this.optionAcc == "From my own account"){
+            const _balances = await getBalance([this.addrOwn], "BinanceSRC");
+            currentBallanc = _balances[0]
+          }
           else if(this.key == "Ethereum" && this.optionAcc == "From prefunded account"){
             const _balances = await getBalance([wallet.address], "EthereumSRC");
             currentBallanc = _balances[0]
@@ -152,6 +165,14 @@ sendTokenToDestChainFromOwnACC,
           }
           else if(this.key == "Moonbeam" && this.optionAcc == "From prefunded account"){
             const _balances = await getBalance([wallet.address], "MoonbeamSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Aurora" && this.optionAcc == "From prefunded account"){
+            const _balances = await getBalance([wallet.address], "AuroraSRC");
+            currentBallanc = _balances[0]
+          }
+          else if(this.key == "Binance" && this.optionAcc == "From prefunded account"){
+            const _balances = await getBalance([wallet.address], "BinanceSRC");
             currentBallanc = _balances[0]
           }
           if(parseInt(currentBallanc) - parseInt(this.sum) < 0)
@@ -194,6 +215,14 @@ sendTokenToDestChainFromOwnACC,
               const _balances = await getBalance([this.balanceAddr], "PolygonDES");
               this.currentBallance = _balances[0]
             }
+            else if(this.selectedPrefundChain == "Aurora"){
+              const _balances = await getBalance([this.balanceAddr], "AuroraDES");
+              this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Binance"){
+              const _balances = await getBalance([this.balanceAddr], "BinanceDES");
+              this.currentBallance = _balances[0]
+            }
           }
 
           else if(this.option == 'Prefunded account ballance'){
@@ -215,6 +244,14 @@ sendTokenToDestChainFromOwnACC,
             }
             else if(this.selectedPrefundChain == "Polygon"){
               const _balances = await getBalance([wallet.address], "PolygonSRC");
+              this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Aurora"){
+              const _balances = await getBalance([wallet.address], "AuroraSRC");
+              this.currentBallance = _balances[0]
+            }
+            else if(this.selectedPrefundChain == "Binance"){
+              const _balances = await getBalance([wallet.address], "BinanceSRC");
               this.currentBallance = _balances[0]
             }
           }
