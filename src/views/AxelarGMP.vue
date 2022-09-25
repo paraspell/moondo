@@ -183,11 +183,17 @@ sendTokenToDestChainFromOwnACC,
             if(this.optionAcc == "From prefunded account"){
               this.$notify({ text: 'Your transaction is processing!', duration: 8000,speed: 100})
               this.txhash = await sendTokenToDestChain(this.sum, [this.addr], this.key, this.keyy)
+              if(this.selectedPrefundChain != "" || this.option != ""){
+                this.displayBallance()
+              }
               this.$notify({ text: 'Your transaction is processed!', type:"success", duration: 8000,speed: 100})
             }
             else if(this.optionAcc == "From my own account"){
               this.$notify({ text: 'This option is under construction, please use prefunded account!', duration: 8000,speed: 100})
               this.txhash = await sendTokenToDestChainFromOwnACC(this.sum, [this.addr], this.key, this.keyy, this.addrOwn)
+              if(this.selectedPrefundChain != "" || this.option != ""){
+                this.displayBallance()
+              }
               this.$notify({ text: 'Your transaction is processed!', type:"success", duration: 8000,speed: 100})
             }
           }
