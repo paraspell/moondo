@@ -1,24 +1,34 @@
-# Moon🌕️Do - UI enhacement for Moonbeam XCM Transactor
-
 ![MoonDoLogo](https://user-images.githubusercontent.com/55763425/188012784-886be693-17f3-495d-be2f-1e19e6496dca.png)
 
-[1. Introduction](#1-introduction)<br />
-[2. Overview](#2-overview)<br />
-[3. Installation](#3-installation-for-local-use)<br />
+
+### Moonbeam dedicated UI enhacement of 
+- **native XCM transfers**
+- **XCM Transactor**
+- **Axelar's GMP functionality**
+
+# Moon🌕️Do readme contents
+#### [1. Introduction](#1-introduction)<br />
+#### [2. Overview](#2-overview)<br />
+#### [3. Installation](#3-installation-for-local-use)<br />
 
 
-# 1. Introduction
+# 1. Introduction 🌿
 Application is deployed & able to be previewed on following link - [Try out Moon🌕️Do on Heroku](https://moondo.herokuapp.com/)
 
-Moon🌕️Do is XCM enhancement tool built in mind with Moonbeam network. Tool includes UI enhancement of XCM Transactor that can perform XCM calls or Balance transfers, generating Sovereign account details & Axelar's GMP XCM transfer capability from Moonbeam to other compatible nodes. Moon🌕️Do is designed to save users time not requiring as many details as it would be necessary to execute tasks through Polkadot UI/ Axelar's test UI. All features are designed to be easily found & used right away. 
+Moon🌕️Do is XCM enhancement tool built in mind with Moonbeam network. Tool includes UI enhancement of native XCM transfers in three scenarios (Parachain to Parachain, Parachain to Relay chain, Relay chain to Parachain), XCM Transactor that can perform XCM calls or Balance transfers, generating Sovereign account details & Axelar's GMP XCM transfer capability from Moonbeam to other compatible nodes. Moon🌕️Do is designed to save users time not requiring as many details as it would be necessary to execute tasks through Polkadot UI/ Axelar's test UI. All features are designed to be easily found & used right away. 
 
-# 2. Overview
-There are not that many UI XCM Tools focusing on Moonbeam's XCM Transactor, Axelar's GMP or Sovereign account generating. Moon🌕️Do focuses on ease of use, being fast, secure & user friendly. User no longer needs to go through a lengthy process to generate a sovereign account manually. They can do it with a few specific details & simple click of a button. Moreover, they can execute XCM or many else calls with XCM Transactor from a different chain with a user-friendly UI. Lastly, user can use Axelar's GMP technology to pass assets between Moonbeam & other supported nodes.
+# 2. Overview 🔎
+There are not that many UI XCM Tools focusing on Moonbeam's native XCM transfers, XCM Transactor, Axelar's GMP or Sovereign account generating. Moon🌕️Do focuses on ease of use, being fast, secure & user friendly. User no longer needs to go through a lengthy process to generate a sovereign account manually. They can do it with a few specific details & simple click of a button. Moreover, they can execute XCM or many else calls with XCM Transactor from a different chain with a user-friendly UI. Lastly, user can use Axelar's GMP technology to pass assets between Moonbeam & other supported nodes.
 
 The project allows user to start Application, that can right out of the box generate sovereign account addresses for cross-chain transfers to/from the Relay chain. User can also create XCM Transactor calls from Parachain to do actions on the Relay chain. 
 Currently available call options that can be executed through XCM Transactor from Moonbase Alpha Parachain:
 - XCM Transfer Call from Relay Chain to any Parachain connected with HRMP channels
 - Balance transfer between Relay Chain accounts
+
+Not only that, but user can now also create native XCM calls in three different scenarios:
+- Transfer from Parachain to Relay chain (Any parachain, that is connected to Moonbase Alpha Relay)
+- Transfer from Parachain to Parachain (Between parachains connected to Moonbase Alpha Relay)
+- Transfer from Relay chain to Parachain (From Moonbase Alpha Relay to any parachain connected)
 
 Another beneficial feature is Axelar's GMP to transfer assets cross-chain between Moonbeam & other supported nodes.
 
@@ -30,7 +40,7 @@ In the picture below on the left is the amount of data Moon🌕️Do requires & 
 [![comparison](https://raw.githubusercontent.com/dudo50/MoonDo/main/img/comparisonimg.jpg)](https://raw.githubusercontent.com/dudo50/MoonDo/main/img/comparisonimg.jpg)
 This is what Moon🌕️Do focuses on with all other scenarios as well.
 
-# 3. Installation for local use
+# 3. Installation for local use 
 
 Make sure to import Alice account which has permission to execute XCM Transactor calls on Moonbase Alpha into your wallet. These permissions can only be received by governance vote.
 
@@ -88,6 +98,6 @@ npm run serve
 npm build
 ```
 
-### Project achievements
+## Project achievements 🏆️
 
-Second place bounty in Moonbeam connected contracts Hackathon - Build Cross-chain application with Axelar [Link to hackathon post](https://devpost.com/software/moondo)
+🥈 Second place bounty in Moonbeam connected contracts Hackathon - Build Cross-chain application with Axelar [Link to hackathon post](https://devpost.com/software/moondo)
