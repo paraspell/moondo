@@ -109,7 +109,6 @@
                     const wsProvider = new WsProvider(this.wssaddr);
                     const api = await ApiPromise.create({ provider: wsProvider });
                     
-                    //API call for XCM transfer from Bifrost to Relay chain /w injected wallet 
                     api.tx.xTokens
                     .transfer(
                     {

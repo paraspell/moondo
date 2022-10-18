@@ -30,7 +30,7 @@
   "dependencies": {
     "@axelar-network/axelar-gmp-sdk-solidity": "^1.2.0",
     "@axelar-network/axelar-local-dev": "^1.1.0",
-    "@axelar-network/axelarjs-sdk": "^0.6.11-alpha.3",
+    "@axelar-network/axelarjs-sdk": "^0.11.4",
     "@fortawesome/fontawesome-free": "^6.1.2",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-brands-svg-icons": "^6.1.2",
