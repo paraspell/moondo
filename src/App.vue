@@ -4,12 +4,17 @@
       <template #start>
         <h1 style="margin-top: 0.5% ;" class="name first" >Moon</h1>
         <img class="mainLogo rotate" src="./assets/moondo.png" />
-        <h1 style="margin-top: 0.5% ;margin-right: 2%;" class="name first" >Do</h1>
+        <h1 style="margin-top: 0.5% ;margin-right: 1%;" class="name first" >Do</h1>
         <b-navbar-item  class="top" tag="router-link" to="/" type="is-link">Home</b-navbar-item>
         <b-navbar-item class="top" tag="router-link" to="/gmp" type="is-link">GMP Transfer</b-navbar-item>
+        <b-navbar-dropdown class="top" label="XCM Transfer">
+          <b-navbar-item tag="router-link" to="/relaytopara" type="is-link">From Relay chain</b-navbar-item>
+          <b-navbar-item tag="router-link" to="/paratorelay" type="is-link">To Relay chain</b-navbar-item>
+          <b-navbar-item tag="router-link" to="/paratopara" type="is-link">To Parachain</b-navbar-item>
+        </b-navbar-dropdown>
         <b-navbar-item class="top" tag="router-link" to="/transactor" type="is-link">Transactor XCM</b-navbar-item>
         <b-navbar-item class="top" tag="router-link" to="/sovereign" type="is-link">Generate sovereign</b-navbar-item>
-        <b-navbar-item style = "margin-top: 0.2%; margin-left: 5%;" @click="isCardModalActive = true">Connect account<b-icon style="margin-left:5px;" size="is-small" pack="fas" icon="wallet"></b-icon></b-navbar-item>
+        <b-navbar-item style = "margin-top: 0.2%; margin-left:1%; " @click="isCardModalActive = true">Connect account<b-icon style="margin-left:5px;" size="is-small" pack="fas" icon="wallet"></b-icon></b-navbar-item>
       </template>
     </b-navbar>
     <router-view/>

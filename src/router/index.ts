@@ -30,6 +30,30 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/TransactorXCM.vue')
   },
   {
+    path: '/paratopara',
+    name: 'ParaToPara',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ParaToPara.vue')
+  },
+  {
+    path: '/relaytopara',
+    name: 'RelayToPara',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/RelayToPara.vue')
+  },
+  {
+    path: '/paratorelay',
+    name: 'ParaToRelay',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ParaToRelay.vue')
+  },
+  {
     path: '/',
     name: 'home',
     component: HomeView

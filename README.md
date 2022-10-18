@@ -90,4 +90,4 @@ npm build
 
 ### Project achievements
 
-Second place bounty in Moonbeam connected contracts Hackathon - Build Cross-chain application with Axelar [Link to hackaton post](https://devpost.com/software/moondo)
+Second place bounty in Moonbeam connected contracts Hackathon - Build Cross-chain application with Axelar [Link to hackathon post](https://devpost.com/software/moondo)
