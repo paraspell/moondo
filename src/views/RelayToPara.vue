@@ -5,7 +5,7 @@
         You are logged in as {{$store.state.account}}.
       </div>
       
-      <b-field class="textt" label-position="inside" label="Select destination parachain">
+      <b-field class="textt" label-position="inside" label="Select origin parachain">
         <b-select expanded v-model="key" placeholder="Select parachain 1" required>
           <option v-for="(item) in items" :key="item">{{item}}</option>
         </b-select>
