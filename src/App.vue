@@ -25,7 +25,7 @@
         aria-close-label="Close message">NOTICE: PLEASE USE TALISMAN WALLET, OTHER WALLETS ARE NOT COMPATIBLE WITH XCM TRANSACTOR PALLET CURRENTLY!<br> Select account you wish to login with and then close this popup by clicking anywhere around these boxes.
       </b-message>
       <b-select placeholder="Select account" expanded style="text-align: center;" @input.native="accountLogin($event)" required>
-        <option v-for="(account, index) in accounts" :key="index">{{account}}</option>
+        <option v-for="(dropdown, index) in dropdown" :key="index">{{dropdown}}</option>
       </b-select>
     </b-modal>
     <notifications/>
@@ -41,28 +41,34 @@
   export default defineComponent({
     data() {
       return {
-        login: "",   //Currently logged account
-        accounts: [],   //List of collected injected wallets
+        accounts: [],  //List of names - To be also used on Log in button
+        addresses: [], //List of addresses
+        injected: [],  //Collected injected wallets
+        dropdown: [],  //Dropdown of names & addresses
         isCardModalActive: false   //Used to determine whether wallet login popup is or is not active
       };
     },
     mounted: async function () {
-      //Connect injected wallets that are available
-      const extensions = await web3Enable("PolkadotJS")
+     //Connect injected wallets that are available
+     const extensions = await web3Enable("PolkadotJS")
       if(extensions.length == 0) {
         this.$notify({ title: 'Error', text: 'You do not have PolkadotJS extension make sure to install one if you want to use your wallet.', type: 'error', duration: 8000,speed: 100})
         return
       }
       //Collect injected wallets
-      this.accounts = await web3Accounts()
+      this.injected = await web3Accounts()
+      //Used to extract address and name from injected wallet login
+      for (let i=0 ;i<this.injected.length; i++){
+        this.accounts.push(JSON.stringify(this.injected[i]["meta"]["name"]))
+        this.addresses.push(JSON.stringify(this.injected[i]["address"]))
+        this.dropdown.push(this.accounts[i] + this.addresses[i])
+      }
     },
     methods:{
       //Used to extract address from injected wallet login
       async accountLogin(value){
-        var accSplit = value.target.value.split('{ "address": "')
-        accSplit = accSplit[1].split('{ "address": "')
-        accSplit = accSplit[0].split('"')
-        this.loginn(accSplit[0])
+        var accSplit = value.target.value.split('"')
+        this.loginn(accSplit[3])
       },
       
       async loginn(value){
