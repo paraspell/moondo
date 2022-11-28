@@ -100,5 +100,5 @@ npm build
 
 ## Project achievements 🏆️
 
-🥈 Second place bounty in Moonbeam connected contracts Hackathon - Build Cross-chain application with Axelar [Link to hackathon post](https://devpost.com/software/moondo)
-🥈 Second place for Moonbeam XCM bounty in Polkadot Hackathon Latam - Build Cross-chain application for Moonbeam [Link to hackathon post](https://polkadothackathonlatam.com/proyecto-inner/dudo50/usuario-single/)
+- 🥈 Second place bounty in Moonbeam connected contracts Hackathon - Build Cross-chain application with Axelar [Link to hackathon post](https://devpost.com/software/moondo)
+- 🥈 Second place for Moonbeam XCM bounty in Polkadot Hackathon Latam - Build Cross-chain application for Moonbeam [Link to hackathon post](https://polkadothackathonlatam.com/proyecto-inner/dudo50/usuario-single/)
